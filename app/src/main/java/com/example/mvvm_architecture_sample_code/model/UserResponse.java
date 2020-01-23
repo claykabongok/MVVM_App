@@ -2,6 +2,11 @@ package com.example.mvvm_architecture_sample_code.model;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class UserResponse {
 
 
@@ -30,40 +35,4 @@ public class UserResponse {
         this.message = message;
     }
 
-
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public UserResponse setUserList(List<User> userList) {
-        this.userList = userList;
-        return this;
-    }
-
-    public Throwable getError() {
-        return error;
-    }
-
-    public UserResponse setError(Throwable error) {
-        this.error = error;
-        return this;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public UserResponse setStatus(int status) {
-        this.status = status;
-        return this;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public UserResponse setMessage(String message) {
-        this.message = message;
-        return this;
-    }
 }
