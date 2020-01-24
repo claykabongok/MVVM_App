@@ -8,10 +8,7 @@ import retrofit2.http.GET;
 
 public interface App_API_Interface {
 
-    /**
-     * list of users
-     * git config --global user.name@return
-     */
+   
     @GET("users")
     Call<List<User>> getUsers();
 
