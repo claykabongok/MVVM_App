@@ -6,31 +6,35 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
-import android.os.Bundle;
+
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.example.mvvm_architecture_sample_code.adapter.UserAdapter;
+import com.example.mvvm_architecture_sample_code.databinding.ActivityMainBinding;
 import com.example.mvvm_architecture_sample_code.model.UserResponse;
 import com.example.mvvm_architecture_sample_code.viewmodel.UserViewModel;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
+
+    //private RecyclerView recyclerView;
     private UserAdapter adapter;
-    private ProgressBar progressBar;
+    //private ProgressBar progressBar;
     private UserViewModel userViewModel;
+    private ActivityMainBinding binding;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        userViewModel= ViewModelProviders.of(this).get(UserViewModel.class);
+        binding= ActivityMainBinding.inflate(getLayoutInflater());
+        View view= binding.getRoot();
 
-        recyclerView= findViewById(R.id.recyclerview);
-        progressBar=findViewById(R.id.progressBar);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setContentView(view);
+        userViewModel= ViewModelProviders.of(this).get(UserViewModel.class);
+        binding.recyclerview.setHasFixedSize(true);
+        binding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
 
 
         
@@ -48,23 +52,25 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChanged(UserResponse userResponse) {
-                progressBar.setVisibility(View.GONE);
+
+                binding.progressBar.setVisibility(View.GONE);
                 if(userResponse.getError() != null){
 
-                    progressBar.setVisibility(View.GONE);
+                    binding.progressBar.setVisibility(View.GONE);
 
                     showError("There was an error while processing your request "+userResponse.getError().getMessage());
 
                 }
                 if(userResponse == null){
-                    progressBar.setVisibility(View.GONE);
+                    binding.progressBar.setVisibility(View.GONE);
                     showError("Unable to retieve data, Please try again.");
                 }
                 if(userResponse.getError() == null && userResponse.getStatus() != 404){
                     try {
 
                         adapter= new UserAdapter(userResponse.getUserList());
-                        recyclerView.setAdapter(adapter);
+
+                        binding.recyclerview.setAdapter(adapter);
                     } catch (Exception e) {
                         e.printStackTrace();
 
