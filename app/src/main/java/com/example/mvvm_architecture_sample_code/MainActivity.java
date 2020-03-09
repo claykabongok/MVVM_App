@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.mvvm_architecture_sample_code.adapter.UserAdapter;
 import com.example.mvvm_architecture_sample_code.databinding.ActivityMainBinding;
 import com.example.mvvm_architecture_sample_code.model.UserResponse;
+import com.example.mvvm_architecture_sample_code.util.NetworkStatus;
 import com.example.mvvm_architecture_sample_code.viewmodel.UserViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,12 +38,19 @@ public class MainActivity extends AppCompatActivity {
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
 
 
-        
-        load_data();
+        boolean isConnected= NetworkStatus.isDeviceConnected(this);
+        if(isConnected){
+            load_data();
+        }else {
+            binding.progressBar.setVisibility(View.GONE);
+            Toast.makeText(this, "Device offline", Toast.LENGTH_LONG).show();
+        }
+
 
     }
     private void showError(String message){
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+
 
     }
     private void load_data() {
@@ -61,11 +69,8 @@ public class MainActivity extends AppCompatActivity {
                     showError("There was an error while processing your request "+userResponse.getError().getMessage());
 
                 }
-                if(userResponse == null){
-                    binding.progressBar.setVisibility(View.GONE);
-                    showError("Unable to retieve data, Please try again.");
-                }
-                if(userResponse.getError() == null && userResponse.getStatus() != 404){
+
+                if(userResponse.getUserList().size() >= 1){
                     try {
 
                         adapter= new UserAdapter(userResponse.getUserList());
