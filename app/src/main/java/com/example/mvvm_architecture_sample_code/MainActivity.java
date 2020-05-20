@@ -56,35 +56,31 @@ public class MainActivity extends AppCompatActivity {
     private void load_data() {
 
 
-        userViewModel.getListUsers().observe(this, new Observer<UserResponse>() {
+        userViewModel.getListUsers().observe(this, userResponse -> {
 
-            @Override
-            public void onChanged(UserResponse userResponse) {
+            binding.progressBar.setVisibility(View.GONE);
+            if(userResponse.getError() != null){
 
                 binding.progressBar.setVisibility(View.GONE);
-                if(userResponse.getError() != null){
 
-                    binding.progressBar.setVisibility(View.GONE);
-
-                    showError("There was an error while processing your request "+userResponse.getError().getMessage());
-
-                }
-
-                if(userResponse.getUserList().size() >= 1){
-                    try {
-
-                        adapter= new UserAdapter(userResponse.getUserList());
-
-                        binding.recyclerview.setAdapter(adapter);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-
-                    }
-                }
-
-
+                showError("There was an error while processing your request "+userResponse.getError().getMessage());
 
             }
+
+            if(userResponse.getUserList().size() >= 1){
+                try {
+
+                    adapter= new UserAdapter(userResponse.getUserList());
+
+                    binding.recyclerview.setAdapter(adapter);
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+            }
+
+
+
         });
     }
 

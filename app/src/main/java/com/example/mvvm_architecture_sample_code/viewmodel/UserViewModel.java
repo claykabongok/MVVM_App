@@ -21,12 +21,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
     public LiveData<UserResponse> getListUsers(){
-        userResponseMediatorLiveData.addSource(userRepository.getUsers(), new Observer<UserResponse>() {
-            @Override
-            public void onChanged(UserResponse userResponse) {
-                userResponseMediatorLiveData.setValue(userResponse);
-            }
-        });
+        userResponseMediatorLiveData.addSource(userRepository.getUsers(), userResponse -> userResponseMediatorLiveData.setValue(userResponse));
         return userResponseMediatorLiveData;
     }
 }
